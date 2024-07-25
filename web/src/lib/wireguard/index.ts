@@ -360,6 +360,7 @@ export async function readWgConf(configId: number): Promise<WgServer> {
   const server: WgServer = {
     id: crypto.randomUUID(),
     confId: configId,
+    interfaceName: '',
     confHash: null,
     tor: false,
     name: '',
@@ -492,6 +493,7 @@ export async function generateWgServer(config: GenerateWgServerParams): Promise<
   let server: WgServer = {
     id: uuid,
     confId,
+    interfaceName: 'wg',
     confHash: null,
     tor: config.tor,
     name: config.name,
@@ -574,10 +576,10 @@ export async function isConfigIdReserved(
 
 export async function getNextFreeConfId(): Promise<number> {
   const ids = (await WG_STORE.listServers()).map((s) => s.confId);
-  const idSet = new Set(ids);
-  const freeId = new Array(maxConfId() + 1).find((_, i) => !idSet.has(i));
+  for (let i = maxConfId() + 1; i < 1000; i++) {
+    if (!ids.includes(i)) return i;
+  }
 
-  if (freeId) return freeId;
   throw new Error('WireGuard: Error: Could not find a free config id');
 }
 

@@ -10,6 +10,29 @@ export default class Network {
     }
   }
 
+  public static async interfacesInUse(): Promise<string[]> {
+    try {
+      // const command = `ip -o link show | awk -F' ' ' {print $2,  $3}' | sed 's/[<>:]//g'`;
+      // o.split('\n').reduce((obj, l) => {
+      //   const [iface, conn] = l.split(' ');
+      // });
+      // aggr;
+      const command = `ip -o link show | awk -F ': ' '{print $2}'`;
+      const { stdout: o } = await execa(command, { shell: true });
+
+      return o.trim().split('\n');
+    } catch (e) {
+      return [];
+    }
+  }
+
+  public static async interfaceInfo(interfaceName: string): Promise<string[]> {
+    const [name, ...rest] = interfaceName;
+
+    const command = `ip -tunnel | awk -F ': ' '{print $1}'`;
+    const { stdout: tunnelNames } = await execa(command, { shell: true });
+  }
+
   public static async inUsePorts(): Promise<number[]> {
     const ports = [];
     const { stdout: output } = await execa(

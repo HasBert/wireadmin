@@ -37,14 +37,14 @@
   <div class={'flex items-center justify-between py-3 px-2'}>
     <h2 class={'font-bold text-xl'}>Hello there 👋</h2>
 
-    <ScanForServerDialog data={data.form} let:builder>
+    <ScanForServerDialog data={data.scanForm} let:builder>
       <Button builders={[builder]} size="sm">
         <ScanSearch class="mr-2" />
         Import Server
       </Button>
     </ScanForServerDialog>
 
-    <CreateServerDialog data={data.form} let:builder>
+    <CreateServerDialog data={data.createForm} let:builder>
       <Button builders={[builder]} size="sm">
         <PlusIcon class="mr-2" />
         Create Server

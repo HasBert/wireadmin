@@ -51,6 +51,15 @@
     },
   });
 
+  const getInterfaces = async (): Promise<void> => {
+    const res = await fetch(`/api/host/interfaces`);
+    if (res.ok) {
+      const data = await res.json();
+      console.log({ data });
+      // healthy = data.healthy;
+    }
+  };
+
   const { form: formData, enhance, submitting } = form;
 </script>
 
@@ -58,32 +67,16 @@
   <DialogTrigger asChild let:builder>
     <slot {builder} />
   </DialogTrigger>
+
   <DialogContent>
     <DialogHeader>
       <DialogTitle>Scan For Server</DialogTitle>
     </DialogHeader>
 
-    <form method="POST" action="?/scan" use:enhance>
-      <!-- <FormField {form} name={'name'}>
-        <FormControl let:attrs>
-          <FormLabel>Name</FormLabel>
-          <Input
-            {...attrs}
-            bind:value={$formData.name}
-            placeholder={'e.g. CuteHub'}
-            type={'text'}
-          />
-          <FormFieldErrors />
-        </FormControl>
-      </FormField> -->
-
-      <DialogFooter>
-        <FormButton disabled={$submitting}>
-          <LoaderCircle class={cn('mr-2 h-4 w-4 animate-spin', !$submitting && 'hidden')} />
-          Scan
-        </FormButton>
-      </DialogFooter>
-    </form>
+    <Button disabled={$submitting} on:click={getInterfaces}>
+      <LoaderCircle class={cn('mr-2 h-4 w-4 animate-spin', !$submitting && 'hidden')} />
+      Scan
+    </Button>
 
     <form method="POST" action="?/create" use:enhance>
       <FormField {form} name={'privateKey'}>

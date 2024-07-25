@@ -177,5 +177,7 @@ Thanks again for your support, it is much appreciated! 🙏
   - [ ] Created Github issue and/or PR?
 - [ ] **Let the user create own templates for peer and server**: create versions to make migration easier later on. 
   - [ ] Created Github issue and/or PR?
+- [ ] **Server Create error makes a invalid state**: create versions to make migration easier later on. 
+  - [ ] Created Github issue and/or PR?
 <!-- - [ ] **Feature add scripted actions after Peer connection**: (dk if needed) this allows for routing  
   - [ ] Created Github issue and/or PR? -->
