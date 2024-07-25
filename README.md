@@ -61,6 +61,18 @@ docker compose up -d
 docker compose logs -f
 ```
 
+### Docker Compose for arm64
+Sadly the provided tag [on github for arm64](https://github.com/wireadmin/wireadmin/pkgs/container/wireadmin) doesn't work as source. The original docker compose doesn't start and has an error with `exec entrypoint.sh`. That's why I found a way to create a image on the raspberry which works.
+
+```bash
+docker buildx create --use
+docker buildx inspect --bootstrap
+
+# use --push to push to registry
+docker buildx build --platform linux/arm64 -t schlotz/wireadmin:arm64  --load . 
+```
+
+
 ### Command line
 
 ```shell
@@ -139,3 +151,28 @@ Thanks again for your support, it is much appreciated! 🙏
 ## License
 
 [GPL-3.0](/LICENSE) © [Shahrad Elahi](https://github.com/shahradelahi)
+
+
+## ToDos
+
+- [x] Docker for arm64
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature Import of existing config**: This will enable usage [like in wireguard-ui](https://github.com/ngoduykhanh/wireguard-ui/tree/master/examples/docker-compose) where you can apply the UI on top of the other config.
+  - [ ] from wg0 conf
+  - [ ] from file
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature fwmark**: enables to route traffic better with IPtables [wg](https://www.wireguard.com/netns/).
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature multiple allowed ips**: allows for better routing
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature persistent keepalive**: allows for better routing
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature Routing through another wireguard instance (just another gateway)**: allows a feature like the tor feature. 
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature show errors ion UI** 
+  - [ ] Created Github issue and/or PR?
+- [ ] **Feature allow URLs as WG_HOST** 
+  - [ ] Created Github issue and/or PR?
+
+<!-- - [ ] **Feature add scripted actions after Peer connection**: (dk if needed) this allows for routing  
+  - [ ] Created Github issue and/or PR? -->
