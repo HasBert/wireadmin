@@ -3,6 +3,7 @@ import { z } from 'zod';
 import {
   AddressSchema,
   DnsSchema,
+  KeySchema,
   MtuSchema,
   NameSchema,
   PortSchema,
@@ -19,3 +20,9 @@ export const createServerSchema = z.object({
 });
 
 export type CreateServerSchemaType = typeof createServerSchema;
+
+export const scanForServerSchema = z.object({
+  privateKey: KeySchema,
+});
+
+export type ScanForServerSchemaType = typeof scanForServerSchema;

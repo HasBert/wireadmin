@@ -8,12 +8,13 @@ import { generateWgServer, isIPReserved, isPortReserved, WGServer } from '$lib/w
 import { NameSchema } from '$lib/wireguard/schema';
 
 import type { PageServerLoad } from './$types';
-import { createServerSchema } from './schema';
+import { createServerSchema, scanForServerSchema } from './schema';
 
 export const load: PageServerLoad = async () => {
   return {
     servers: await WG_STORE.listServers(),
-    form: await superValidate(zod(createServerSchema)),
+    createForm: await superValidate(zod(createServerSchema)),
+    scanForm: await superValidate(zod(scanForServerSchema)),
   };
 };
 
@@ -76,4 +77,5 @@ export const actions: Actions = {
       return setError(form, 'Unhandled Exception');
     }
   },
+  scan: async (event) => {},
 };

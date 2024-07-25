@@ -8,8 +8,9 @@
   import fetchAction from '$lib/utils/fetch-action';
   import CreateServerDialog from './CreateServerDialog.svelte';
   import { Button } from '$lib/components/ui/button';
-  import { PlusIcon } from 'lucide-svelte';
+  import { PlusIcon, ScanSearch } from 'lucide-svelte';
   import { DnsmasqIcon, OnionIcon } from '$lib/components/iconset';
+  import ScanForServerDialog from './ScanForServerDialog.svelte';
 
   export let data: PageData;
 
@@ -35,6 +36,13 @@
 <BasePage showLogout={true}>
   <div class={'flex items-center justify-between py-3 px-2'}>
     <h2 class={'font-bold text-xl'}>Hello there 👋</h2>
+
+    <ScanForServerDialog data={data.form} let:builder>
+      <Button builders={[builder]} size="sm">
+        <ScanSearch class="mr-2" />
+        Import Server
+      </Button>
+    </ScanForServerDialog>
 
     <CreateServerDialog data={data.form} let:builder>
       <Button builders={[builder]} size="sm">

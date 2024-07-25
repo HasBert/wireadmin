@@ -48,6 +48,7 @@ export const WgServerSchema = z
   .object({
     id: z.string().uuid(),
     confId: z.number(),
+    interfaceName: z.string().default('wg'),
     confHash: z.string().nullable(),
     tor: TorSchema,
     name: NameSchema,

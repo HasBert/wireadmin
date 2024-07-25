@@ -1,4 +1,5 @@
 import fs, { promises } from 'node:fs';
+import { isPromise } from 'node:util/types';
 import path from 'path';
 import deepmerge from 'deepmerge';
 import { execa } from 'execa';
@@ -137,8 +138,8 @@ export class WGServer {
   async isUp(): Promise<boolean> {
     const server = await this.get();
     try {
-      const res = await execa(`wg show wg${server.confId}`, { shell: true });
-      return res.stdout.includes('wg');
+      const res = await execa(`wg show ${server.interfaceName}${server.confId}`, { shell: true });
+      return res.stdout.includes(server.interfaceName);
     } catch (e) {
       return false;
     }
@@ -158,9 +159,12 @@ export class WGServer {
       return usages;
     }
 
-    const { stdout, stderr } = await execa(`wg show wg${server.confId} transfer`, {
-      shell: true,
-    });
+    const { stdout, stderr } = await execa(
+      `wg show ${server.interfaceName}${server.confId} transfer`,
+      {
+        shell: true,
+      }
+    );
     if (stderr) {
       logger.warn(`WgServer: GetUsage: ${stderr}`);
       return usages;
@@ -196,6 +200,7 @@ export class WGServer {
       }
     }
 
+    //TODO: we should throw a error here
     logger.error('WGServer: GetFreePeerIP: no free ip found');
     return undefined;
   }
@@ -344,8 +349,8 @@ class WGPeers {
   }
 }
 
-function resolveConfigPath(confId: number): string {
-  return path.resolve(path.join(WG_PATH, `wg${confId}.conf`));
+function resolveConfigPath(confId: number, configPath: string = WG_PATH): string {
+  return path.resolve(path.join(configPath, `wg${confId}.conf`));
 }
 
 export async function readWgConf(configId: number): Promise<WgServer> {
@@ -441,9 +446,10 @@ export async function readWgConf(configId: number): Promise<WgServer> {
 /**
  * This function checks if a WireGuard config exists in file system
  * @param configId
+ * @param configPath - optional path to the config file directory
  */
-function wgConfExists(configId: number): boolean {
-  const confPath = resolveConfigPath(configId);
+function wgConfExists(configId: number, configPath?: string): boolean {
+  const confPath = resolveConfigPath(configId, configPath);
   return fsAccess(confPath);
 }
 
@@ -558,19 +564,20 @@ export async function isPortReserved(port: number): Promise<boolean> {
   return inUsePorts.includes(port);
 }
 
-export async function isConfigIdReserved(id: number): Promise<boolean> {
-  const severs = await WG_STORE.listServers();
-  const ids = severs.map((s) => s.confId);
-  return ids.includes(id);
+export async function isConfigIdReserved(
+  id: number,
+  existing?: Promise<WgServer[]> | WgServer[]
+): Promise<boolean> {
+  const servers = await Promise.resolve(existing || WG_STORE.listServers());
+  return !!servers.find((server) => server.confId === id);
 }
 
 export async function getNextFreeConfId(): Promise<number> {
-  let id = maxConfId() + 1;
-  for (let i = id; i < 1_000; i++) {
-    if (!(await isConfigIdReserved(i))) {
-      return i;
-    }
-  }
+  const ids = (await WG_STORE.listServers()).map((s) => s.confId);
+  const idSet = new Set(ids);
+  const freeId = new Array(maxConfId() + 1).find((_, i) => !idSet.has(i));
+
+  if (freeId) return freeId;
   throw new Error('WireGuard: Error: Could not find a free config id');
 }
 

@@ -153,13 +153,13 @@ Thanks again for your support, it is much appreciated! 🙏
 [GPL-3.0](/LICENSE) © [Shahrad Elahi](https://github.com/shahradelahi)
 
 
-## ToDos
+# My ToDo/Feature List
 
 - [x] Docker for arm64
   - [ ] Created Github issue and/or PR?
-- [ ] **Feature Import of existing config**: This will enable usage [like in wireguard-ui](https://github.com/ngoduykhanh/wireguard-ui/tree/master/examples/docker-compose) where you can apply the UI on top of the other config.
-  - [ ] from wg0 conf
-  - [ ] from file
+- [ ] **Feature Import of existing config**: This will enable usage [like in wireguard-ui](https://github.com/ngoduykhanh/wireguard-ui/tree/master/examples/docker-compose) where you can apply the UI on top of the other config. `index.ts => makeWgIptables`
+  - [ ] from existing file/filesystem `index.ts => resolveConfigPath`
+  - [ ] from running wireguard system `network.ts => interfaceExists`, `constants.ts => WG_PATH`
   - [ ] Created Github issue and/or PR?
 - [ ] **Feature fwmark**: enables to route traffic better with IPtables [wg](https://www.wireguard.com/netns/).
   - [ ] Created Github issue and/or PR?
@@ -167,12 +167,15 @@ Thanks again for your support, it is much appreciated! 🙏
   - [ ] Created Github issue and/or PR?
 - [ ] **Feature persistent keepalive**: allows for better routing
   - [ ] Created Github issue and/or PR?
-- [ ] **Feature Routing through another wireguard instance (just another gateway)**: allows a feature like the tor feature. 
+- [ ] **Feature Routing through another wireguard instance (just another gateway)**: allows a feature like the tor feature. `index.ts => makeWgIptables` 
   - [ ] Created Github issue and/or PR?
 - [ ] **Feature show errors ion UI** 
   - [ ] Created Github issue and/or PR?
 - [ ] **Feature allow URLs as WG_HOST** 
   - [ ] Created Github issue and/or PR?
-
+- [ ] **Let the user decide what IP CIDR they want /20, /24, /32 for Peers** 
+  - [ ] Created Github issue and/or PR?
+- [ ] **Let the user create own templates for peer and server**: create versions to make migration easier later on. 
+  - [ ] Created Github issue and/or PR?
 <!-- - [ ] **Feature add scripted actions after Peer connection**: (dk if needed) this allows for routing  
   - [ ] Created Github issue and/or PR? -->

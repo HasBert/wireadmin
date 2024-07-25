@@ -69,3 +69,7 @@ export const ServerStatusSchema = z.enum(['up', 'down'], {
     }
   },
 });
+
+export const KeySchema = z
+  .string()
+  .max(44, { message: 'A 32 byte wireguard key is usally 44 characters long' });
